@@ -1,0 +1,17 @@
+<div class="container home" ng-controller='homeController'>
+	<div class="well panal">
+		<h2>{{appname}}</h2>
+		<div class="row">
+			<div class="col-xs-12">
+				<input id="twitter_phrase" placeholder="Enter a twitter handle" size="30" type="text" ng-model="phrase">		
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12" style="margin-top:50px">
+				<button ng-click="analyzePhrase()" class="btn btn-primary" >Go</button>		
+			</div>
+		</div>
+
+	</div>
+  
+</div>	
