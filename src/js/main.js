@@ -1,14 +1,19 @@
 require.config({
 	paths:{
-		'jQuery':'lib/jquery-1.11.1.min',
+		'jQuery':'libs/jquery-1.7.2.min',
+		'd3':'libs/d3.min',
         'angular': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular',
         'angular-route': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route',
-        'app':'app'		
+        'app':'app',
+		'vis':'vis'    
 	},
 	shim:{
-		'client':{
+		'd3':{
 			deps:['jQuery'],
-			exports: 'client'
+			exports: 'd3'
+		},
+		'vis':{
+			deps:['d3'],
 		},
 		'app':{
 			deps:['angular','angular-route'],
@@ -16,14 +21,11 @@ require.config({
 		},
 		'angular-route':{
 			deps:['angular'],
-		},
-		'events':{
-			deps:['jQuery','client']
 		}
 	}
 });
 
-require(['app'], function (app) {
+require(['app','jQuery','d3'], function (app) {
 
     'use strict';
 

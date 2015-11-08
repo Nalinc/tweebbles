@@ -19,9 +19,9 @@ var OEMBED_URL = 'statuses/oembed';
 var USER_TIMELINE_URL = 'statuses/user_timeline';
 
 
-app.get('/user_timeline/:user', function(req, res) {
-
-  var oEmbedTweets = [], tweets = [],
+app.get('/timeline/:user', function(req, res) {
+  
+  var oEmbedTweets = [], tweets = [], allTweets="",
 
   params = {
     screen_name: req.params.user, // the user id passed in as part of the route
@@ -39,12 +39,36 @@ app.get('/user_timeline/:user', function(req, res) {
     tweets = data;
 
     var i = 0, len = tweets.length;
-
+    console.log(tweets[0])
     for(i; i < len; i++) {
-      getOEmbed(tweets[i]);
+      allTweets+=tweets[i].text+" ";
+//      getOEmbed(tweets[i]);
     }
+
+    res.send(wordFrequency(allTweets))
+
   });
 
+  /*
+   * return array of objects containing frequency analysis of all tokens
+   */
+  function wordFrequency(txt){
+    var wordArray = txt.split(/[ .?!,*'"]/);
+    var newArray = [], wordObj;
+    wordArray.forEach(function (word) {
+      if(word){
+         wordObj = newArray.filter(function (w){
+           return w.name == word;
+         });
+         if (wordObj.length) {
+           wordObj[0].count += 1;
+         } else {
+           newArray.push({name: word, word: word, count:1});
+         }
+      }
+    });
+    return newArray;
+  }
   /**
    * requests the oEmbed html
    */
