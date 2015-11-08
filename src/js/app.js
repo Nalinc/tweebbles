@@ -61,14 +61,23 @@ define(['vis'], function() {
 
 					$http.get('timeline/'+$rootScope.testphrase).
 					then(function(res){
-						display(res.data)
-						console.log(res);
+
+						res.data.sort(function(a, b) {
+						    return parseFloat(b.count) - parseFloat(a.count);
+						});
+
+						var obj = res.data.slice(0,50);
+						console.log(obj);
+						display(obj)
 					},function(err){
 						console.log(err);
 					});
 
 //				  d3.json("data/" + text.file, display);
 
+			}
+
+			function applySort(temp){
 			}
 		});
 

@@ -39,13 +39,13 @@ app.get('/timeline/:user', function(req, res) {
     tweets = data;
 
     var i = 0, len = tweets.length;
-    console.log(tweets[0])
     for(i; i < len; i++) {
       allTweets+=tweets[i].text+" ";
 //      getOEmbed(tweets[i]);
     }
-
-    res.send(wordFrequency(allTweets))
+    var exp = /(\b(https?|ftp|file|www)[:\/\/]*[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    
+    res.send(wordFrequency(allTweets.replace(exp,"")))
 
   });
 

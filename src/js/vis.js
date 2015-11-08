@@ -61,7 +61,7 @@ Bubbles = function() {
       rScale.domain([0, maxDomainValue]);
       svg = d3.select(this).selectAll("svg").data([data]);
       svgEnter = svg.enter().append("svg");
-      svg.attr("width", width + margin.left + margin.right);
+      svg.attr("width", "100%");
       svg.attr("height", height + margin.top + margin.bottom);
       node = svgEnter.append("g").attr("id", "bubble-nodes").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       node.append("rect").attr("id", "bubble-background").attr("width", width).attr("height", height).on("click", clear);
