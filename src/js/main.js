@@ -6,7 +6,7 @@ require.config({
         'angular-route': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route',
         'app':'app',
 		'vis':'vis',
-		'jqueryui':'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min'
+		'jqueryui':'https://code.jquery.com/ui/1.11.4/jquery-ui.min'
 	},
 	shim:{
 		'd3':{
