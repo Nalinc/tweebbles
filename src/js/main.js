@@ -5,12 +5,16 @@ require.config({
         'angular': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular',
         'angular-route': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route',
         'app':'app',
-		'vis':'vis'    
+		'vis':'vis',
+		'jqueryui':'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min'
 	},
 	shim:{
 		'd3':{
 			deps:['jQuery'],
 			exports: 'd3'
+		},
+		'jqueryui':{
+			deps:['jQuery'],
 		},
 		'vis':{
 			deps:['d3'],

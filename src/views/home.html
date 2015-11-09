@@ -6,6 +6,37 @@
 				<input id="twitter_phrase" placeholder="Enter a twitter handle" size="30" type="text" ng-model="phrase">		
 			</div>
 		</div>
+		<div class="row" style="width:40%;margin:0 auto">
+			<div class="col-xs-4">
+				<div class="radio radio-success">
+					<input id="radio1" type="radio" name="radio" value="1" checked="">
+					<label for="radio1" title="frequency analysis of user tweets"><span><span></span></span>@User</label>
+	            </div>
+			</div>
+			<div class="col-xs-4">
+				<div class="radio radio-success">
+					<input id="radio2" type="radio" name="radio" value="2">
+					<label for="radio2" title="trending topics for a specific 'place'"><span><span></span></span>#Trends</label>
+	            </div>
+			</div>
+			<div class="col-xs-4">
+				<div class="radio radio-success">
+					<input id="radio3" type="radio" name="radio" value="3">
+					<label for="radio3" title="sentiment analysis of a given phrase"><span><span></span></span>Sentiment</label>
+	            </div>
+			</div>
+		</div>
+		<div class="row" style="margin:0 auto; margin-top:30px;text-align:center">
+			<div class="col-xs-12">
+			Tweets:<span id="curr-tasks_time" class="calc_number">100</span>
+			</div>
+			<div class="col-xs-12" style="">
+            <div id="tasks_time">
+            </div>
+			</div>
+
+		</div>
+
 		<div class="row">
 			<div class="col-xs-12" style="margin-top:50px">
 				<button ng-click="analyzePhrase()" class="btn btn-primary" >Go</button>		

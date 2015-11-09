@@ -40,6 +40,12 @@ header {
   padding: 10px;
 }
 
+#twitter_phrase{
+  text-align: center;
+  border-color: rgba(10, 57, 129, 0.8);
+  border-bottom-width: 7px;
+  
+}
 #book-title {
   font-family: georgia, "times new roman", times, serif;
   color: #555;
@@ -105,6 +111,11 @@ a.bubble-label {
   position: absolute;
 }
 
+.btn.btn-primary {
+    color: #fff;
+    background-color: rgba(10, 57, 129, 0.8);
+    border-color: rgba(10, 57, 129, 0.8);
+}
 
 .bubble-label .bubble-label-value {
   font: 11px sans-serif;
@@ -123,3 +134,126 @@ a.bubble-label {
   font-weight: bold;  
 }
 
+#curr-tasks_time{
+  color: #f6931f;
+  font-weight:bold;
+}
+.ui-widget-header { 
+  background: rgba(10, 57, 129, 0.8) !important; 
+}
+
+input[type=checkbox]:not(old),
+input[type=radio   ]:not(old){
+  width     : 2em;
+  margin    : 0;
+  padding   : 0;
+  font-size : 1em;
+  opacity   : 0;
+}
+
+input[type=checkbox]:not(old) + label,
+input[type=radio   ]:not(old) + label{
+  display      : inline-block;
+  margin-left  : -2em;
+  line-height  : 1.5em;
+}
+
+input[type=checkbox]:not(old) + label > span,
+input[type=radio   ]:not(old) + label > span{
+  display          : inline-block;
+  width            : 16px;
+  height           : 16px;
+  margin           : 0.25em 0.5em 0.25em 0.25em;
+  border           : 0.0625em solid rgb(192,192,192);
+  border-radius    : 0.25em;
+  background       : rgb(224,224,224);
+  background-image :    -moz-linear-gradient(rgb(200,200,200),rgb(224,224,224));
+  background-image :     -ms-linear-gradient(rgb(200,200,200),rgb(224,224,224));
+  background-image :      -o-linear-gradient(rgb(200,200,200),rgb(224,224,224));
+  background-image : -webkit-linear-gradient(rgb(200,200,200),rgb(224,224,224));
+  background-image :         linear-gradient(rgb(200,200,200),rgb(224,224,224));
+  vertical-align   : bottom;
+}
+
+input[type=checkbox]:not(old):checked + label > span,
+input[type=radio   ]:not(old):checked + label > span{
+  background-image :    -moz-linear-gradient(rgb(200,200,200),rgb(240,240,240));
+  background-image :     -ms-linear-gradient(rgb(200,200,200),rgb(240,240,240));
+  background-image :      -o-linear-gradient(rgb(200,200,200),rgb(240,240,240));
+  background-image : -webkit-linear-gradient(rgb(200,200,200),rgb(240,240,240));
+  background-image :         linear-gradient(rgb(200,200,200),rgb(240,240,240));
+}
+
+input[type=checkbox]:not(old):checked + label > span:before{
+  content     : '✓';
+  display     : block;
+  width       : 1em;
+  color       : rgb(153,204,102);
+  font-size   : 0.875em;
+  line-height : 1em;
+  text-align  : center;
+  text-shadow : 0 0 0.0714em rgb(115,153,77);
+  font-weight : bold;
+}
+
+input[type=radio]:not(old):checked +  label > span > span{
+  display          : block;
+  width            : 10px;
+  height           : 10px;
+  margin           : 3px;
+  border           : 0.0625em solid rgb(115,153,77);
+  border-radius    : 0.125em;
+  background       : rgb(153,204,102);
+  background-image :    -moz-linear-gradient(rgb(100,180,150),rgb(153,204,102));
+  background-image :     -ms-linear-gradient(rgb(100,180,150),rgb(153,204,102));
+  background-image :      -o-linear-gradient(rgb(100,180,150),rgb(153,204,102));
+  background-image : -webkit-linear-gradient(rgb(100,180,150),rgb(153,204,102));
+  background-image :         linear-gradient(rgb(100,180,150),rgb(153,204,102));
+}
+
+
+
+  .ui-tooltip, .arrow:after {
+    background: black;
+    border: 2px solid white;
+  }
+  .ui-tooltip {
+    padding: 10px 20px;
+    color: white;
+    border-radius: 20px;
+    font: bold 14px "Helvetica Neue", Sans-Serif;
+    text-transform: uppercase;
+    box-shadow: 0 0 7px black;
+  }
+  .arrow {
+    width: 70px;
+    height: 16px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    margin-left: -35px;
+    bottom: -16px;
+  }
+  .arrow.top {
+    top: -16px;
+    bottom: auto;
+  }
+  .arrow.left {
+    left: 20%;
+  }
+  .arrow:after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: -20px;
+    width: 25px;
+    height: 25px;
+    box-shadow: 6px 5px 9px -9px black;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .arrow.top:after {
+    bottom: -20px;
+    top: auto;
+  }
