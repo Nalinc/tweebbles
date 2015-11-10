@@ -3,6 +3,33 @@ html,body{
   width: 100%;
   background-color: #F6F6F6 !important;
 }
+#loader {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.4) !important;
+  z-index: 9999;
+}
+
+#apploader{
+  position:fixed;
+  top:50%;
+  left:50%;
+  z-index:9;
+}
+.status1 {
+  width: 50px; height:50px;
+  position: absolute;
+  left: 50%; top: 45%;
+  margin: -25px 0 0 -25px;
+  color: #000;
+}
+.status2 {
+  width: 100px; height:36px;
+  position: absolute;
+  left: 50%; top: 50%;
+  margin: 12px 0 0 -50px;
+  font-weight: bold;
+}
 .navbar .navbar-header .navbar-brand{
     float: left;
     margin-right: 10px;
@@ -87,7 +114,7 @@ header {
 
 .bubble-node {
   /* fill: #d1e0f3; */
-  fill: #DCE9BE;
+  fill: #93aed7;
 }
 
 .bubble-hover {
@@ -97,7 +124,7 @@ header {
 
 .bubble-selected {
   /* fill: #a8c8ee;  */
-  fill: #CEE98F;
+  fill: #b9cbe6;
   /* stroke: #6081a3; */
   stroke: #A6BA92;
   stroke-width: 1.5px;

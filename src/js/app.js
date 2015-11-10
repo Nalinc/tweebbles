@@ -14,7 +14,20 @@ define(['vis','jqueryui'], function() {
 			    controller: 'bubbleController'
 			  })
 		});
-
+		 	app.directive("ngHeader",function(){
+		 		return{
+		 			restrict:'E',
+					templateUrl:'views/ng-header.html',
+					controller:function($rootScope){
+						$rootScope.$on('$routeChangeStart', function(event, next, current) {
+							$rootScope.showLoader= true;
+						});
+						$rootScope.$on('$routeChangeSuccess', function(event, next, current) {
+							$rootScope.showLoader= false;
+						});			
+					}
+		 		};
+		 	});
 		app.controller('homeController', function($scope,$rootScope,$location,$http){
 			$scope.appname = '< Tweebbles >';
             function update() {
@@ -43,6 +56,7 @@ define(['vis','jqueryui'], function() {
 			$scope.analyzePhrase = function(){
 				$rootScope.testphrase=$scope.phrase;
 				if($scope.phrase){
+					$rootScope.showLoader=true;
 					init()
 				}
 			};
@@ -71,7 +85,7 @@ define(['vis','jqueryui'], function() {
 				$rootScope.showLoader= false;
 				$scope.feeds=[];
 				console.log($rootScope.bubbleData)
-				plot = Bubbles();
+				window.plot = Bubbles();
 				display = function(data) {
 					return plotData("#vis", data, plot);
 				};
@@ -95,6 +109,29 @@ define(['vis','jqueryui'], function() {
 				d3.select("#book-title").html(text.name);
 
 				display($rootScope.bubbleData)
+				var obj = [
+							{
+								"name":"holmes",
+								"word":"holmes",
+								"count":4
+							},{
+								"name":"little",
+								"word":"little",
+								"count":3
+							},{
+								"name":"time",
+								"word":"time",
+								"count":2
+							},{
+								"name":"door",
+								"word":"door",
+								"count":1
+							}];
+
+				$timeout(function(){
+					console.log('now')
+					//display(obj)
+				},2000)
 			}
 		});
 

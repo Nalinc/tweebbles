@@ -4,20 +4,21 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://rawgit.com/chinchang/hint.css/master/hint.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css">
     
     <script data-main="js/main.js" type="text/javascript" src="js/libs/require.min.js"></script>
 
   </head>
 
   <body>
-    <nav class="navbar navbar-blue">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#/">Tweebbles</a>
-        </div>
-      </div>
-    </nav>  
+    <ng-header></ng-header>
 
+    <div id="loader" ng-show="showLoader">
+        <div id="apploader">
+            <div class="status1"><i class="fa fa-clock-o fa-2x fa-spin"></i></div>
+            <div class="status2">Just a sec</div>
+        </div>
+    </div>
     <div ng-view></div>
 
     <div class="footer">
