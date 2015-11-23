@@ -30,6 +30,15 @@ define(['vis','jqueryui'], function() {
 		 	});
 		app.controller('homeController', function($scope,$rootScope,$location,$http){
 			$scope.appname = '< Tweebbles >';
+			$rootScope.search = {
+				'option': 'user'
+			}
+			$scope.PHtext = {
+				'user':'Enter a twitter handle',
+				'trend':'Enter a place',
+				'sentiment':'Enter a phrase'
+			}
+
             function update() {
                 var tasks_time = $('#tasks_time').slider('value');
                 var tasks_done = $('#tasks_done').slider('value');
@@ -61,20 +70,20 @@ define(['vis','jqueryui'], function() {
 				}
 			};
 			function init(){
-				  var display, key, plot, text;
+				var display, key, plot, text;
 
-					$http.get('timeline/'+$rootScope.testphrase).
-					then(function(res){
+				$http.get('timeline/'+$rootScope.testphrase).
+				then(function(res){
 
-						res.data.sort(function(a, b) {
-						    return parseFloat(b.count) - parseFloat(a.count);
-						});
-
-						$rootScope.bubbleData = res.data.slice(0,50);
-						$location.path("/monitor");						
-					},function(err){
-						console.log(err);
+					res.data.sort(function(a, b) {
+					    return parseFloat(b.count) - parseFloat(a.count);
 					});
+
+					$rootScope.bubbleData = res.data.slice(0,50);
+					$location.path("/monitor");						
+				},function(err){
+					console.log(err);
+				});
 			}
 		});
 
@@ -108,7 +117,7 @@ define(['vis','jqueryui'], function() {
 				});
 				d3.select("#book-title").html(text.name);
 
-				display($rootScope.bubbleData)
+				
 				var obj = [
 							{
 								"name":"holmes",
@@ -131,7 +140,28 @@ define(['vis','jqueryui'], function() {
 				$timeout(function(){
 					console.log('now')
 					//display(obj)
-				},2000)
+
+					if($rootScope.search.option=='user'){
+						display($rootScope.bubbleData)
+					}
+					if($rootScope.search.option=='sentiment'){
+						var o = new bubbleStream();
+/*						setInterval(function(){
+						  var start = d3.min(o.data, o.dateFn)
+						  var end = d3.max(o.data, o.dateFn)
+						  var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+						  var date = new Date(time)
+
+						  obj = {
+						    'id': Math.floor(Math.random() * 70),
+						    'amount': Math.floor(1000 + Math.random() * 20001),
+						    'created_at': date.toDateString()
+						  }
+						  o.data.push(obj)
+						  o.refreshGraph()
+						},2000)*/
+					}
+				})
 			}
 		});
 

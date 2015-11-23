@@ -3,25 +3,25 @@
 		<h2>{{appname}}</h2>
 		<div class="row">
 			<div class="col-xs-12">
-				<input id="twitter_phrase" placeholder="Enter a twitter handle" size="30" type="text" ng-model="phrase">		
+				<input id="twitter_phrase" placeholder="{{PHtext[search.option]}}" size="30" type="text" ng-model="phrase">		
 			</div>
 		</div>
 		<div class="row" style="width:40%;margin:0 auto">
 			<div class="col-xs-4">
 				<div class="radio radio-success">
-					<input id="radio1" type="radio" name="radio" value="1" checked="">
+					<input id="radio1" type="radio" value="user" ng-model="search.option">
 					<label for="radio1"  class="hint--bottom hint--rounded" data-hint="frequency analysis of user tweets"><span><span></span></span>@User</label>
 	            </div>
 			</div>
 			<div class="col-xs-4">
 				<div class="radio radio-success">
-					<input id="radio2" type="radio" name="radio" value="2">
+					<input id="radio2" type="radio" value="trend" ng-model="search.option">
 					<label for="radio2" class="hint--bottom hint--rounded" data-hint="trending topics for a specific 'place'"><span><span></span></span>#Trends</label>
 	            </div>
 			</div>
 			<div class="col-xs-4">
 				<div class="radio radio-success">
-					<input id="radio3" type="radio" name="radio" value="3">
+					<input id="radio3" type="radio" value="sentiment" ng-model="search.option">
 					<label for="radio3" class="hint--bottom hint--rounded" data-hint="sentiment analysis of a given phrase"><span><span></span></span>Sentiment</label>
 	            </div>
 			</div>

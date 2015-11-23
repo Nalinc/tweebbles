@@ -96,6 +96,10 @@ app.get('/timeline/:user', function(req, res) {
   }
 });
 
+/*app.get('',function(){
+
+})
+*/
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))

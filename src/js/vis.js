@@ -234,6 +234,113 @@ texts = [
   }
 ];
 
+/*------------------------------------------------------------
+ *dynamic bubbles
+------------------------------------------------------------*/
+function bubbleStream(){
+  this.JSONData = [
+    { "id": 3, "created_at": "Sun May 05 2013", "amount": 12000},
+    { "id": 1, "created_at": "Mon May 13 2013", "amount": 2000},
+    { "id": 2, "created_at": "Thu Jun 06 2013", "amount": 17000},
+    { "id": 4, "created_at": "Thu May 09 2013", "amount": 15000},
+    { "id": 5, "created_at": "Mon Jul 01 2013", "amount": 16000}
+  ]
+  this.data = this.JSONData.slice()
+  this.format = d3.time.format("%a %b %d %Y")
+  var that = this;
+  this.customHeight = window.innerHeight - 300;
+  this.customWidth = window.innerWidth - 300;  
+  this.amountFn = function(d) { return d.amount }
+  this.dateFn = function(d) { return that.format.parse(d.created_at) }
+
+  this.x = d3.time.scale().range([10, this.customWidth]).domain(d3.extent(this.data, this.dateFn))
+
+  this.y = d3.scale.linear().range([this.customWidth, 10]).domain(d3.extent(this.data, this.amountFn))
+  
+  
+  this.svg = d3.select("#demo").append("svg:svg").attr("width", this.customWidth).attr("height", this.customHeight)
+
+  this.refreshGraph = function() {
+    that.x.domain(d3.extent(that.data, that.dateFn))
+    that.y.domain(d3.extent(that.data, that.amountFn))
+  
+    this.circles = that.svg.selectAll("circle").data(that.data).enter()
+   .append("svg:circle")
+   .attr("r", 10)
+   .attr("cx", function(d) { return that.x(that.dateFn(d)) })
+   .attr("cy", function(d) { return that.y(that.amountFn(d)) })
+   .attr("style", "cursor: pointer;")
+   .on("click", function(d) {
+      d3.select("#demo-footer .value").text("Date: " + d.created_at + " amount: " + d.amount)
+   })
+    
+    this.circles.transition()
+     .attr("cx", function(d) { return that.x(that.dateFn(d)) })
+     .attr("cy", function(d) { return that.y(that.amountFn(d)) })
+  
+     this.circles.enter()
+      .append("svg:circle")
+      .attr("r", 10)
+      .attr("cx", function(d) { return that.x(that.dateFn(d)) })
+      .attr("cy", function(d) { return that.y(that.amountFn(d)) })
+  }
+
+   this.svg.selectAll("circle")
+   .data(this.JSONData, function(d) {
+     return d.created_at
+   });
+   
+/*  d3.selectAll(".add-data")
+   .on("click", function() {
+     var start = d3.min(data, dateFn)
+     var end = d3.max(data, dateFn)
+     var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+     var date = new Date(time)
+
+     obj = {
+       'id': Math.floor(Math.random() * 70),
+       'amount': Math.floor(1000 + Math.random() * 20001),
+       'created_at': date.toDateString()
+     }
+     data.push(obj)
+     refreshGraph()
+  })
+*/
+  setInterval(function(){
+      var start = d3.min(that.data, that.dateFn)
+      var end = d3.max(that.data, that.dateFn)
+      var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+      var date = new Date(time)
+
+      obj = {
+        'id': Math.floor(Math.random() * 70),
+        'amount': Math.floor(1000 + Math.random() * 20001),
+        'created_at': date.toDateString()
+      }
+      that.data.push(obj)
+      that.refreshGraph()
+  },2000) 
+
+/*  setInterval(this.repaint,2000);
+  this.repaint = function(){
+      var start = d3.min(that.data, that.dateFn)
+      var end = d3.max(that.data, that.dateFn)
+      var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+      var date = new Date(time)
+
+      obj = {
+        'id': Math.floor(Math.random() * 70),
+        'amount': Math.floor(1000 + Math.random() * 20001),
+        'created_at': date.toDateString()
+      }
+      that.data.push(obj)
+      that.refreshGraph()    
+  }
+*/
+
+  that.refreshGraph()
+}
+
 $(function() {
 
 });

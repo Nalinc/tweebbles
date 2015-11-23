@@ -4,10 +4,22 @@
     <h4>Most frequently used phrases by: <b>@{{testphrase}}</b></h4>
       
     </header>
-    <div id="main" role="main">
-      <div id="vis"></div>
-      <div id="status"></div>
+    <div ng-if='search.option=="user"'>
+	    <div id="main" role="main">
+	      <div id="vis"></div>
+	      <div id="status"></div>
+	    </div>    	
     </div>
+
+	<div  ng-if='search.option=="sentiment"'>
+	    <div id="demo" style="text-align: center;">
+	    </div>
+	    <div id='demo-footer'>
+			<p class="value"></p>
+	    </div>		
+	</div>
+ 
+
 </div>
 
 <!-- <script type="text/javascript" src="js/vis.js"></script> -->
