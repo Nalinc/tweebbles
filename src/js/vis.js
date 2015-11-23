@@ -238,107 +238,169 @@ texts = [
  *dynamic bubbles
 ------------------------------------------------------------*/
 function bubbleStream(){
+
+  this.customHeight = window.innerHeight - 300;
+  this.customWidth = window.innerWidth - 300;  
+
   this.JSONData = [
-    { "id": 3, "created_at": "Sun May 05 2013", "amount": 12000},
-    { "id": 1, "created_at": "Mon May 13 2013", "amount": 2000},
-    { "id": 2, "created_at": "Thu Jun 06 2013", "amount": 17000},
-    { "id": 4, "created_at": "Thu May 09 2013", "amount": 15000},
-    { "id": 5, "created_at": "Mon Jul 01 2013", "amount": 16000}
-  ]
+    { "user": 'abc', 
+      "text":"HELLOWORLD",
+      "created_at": "Sun May 05 2013", 
+      "url": 'http://www.twitter.com/',
+      "score":5,
+      "positive_count":"3",
+      "negative_count":"1",
+      "comparative":"1",
+      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
+      "verticalPos": Math.floor(10 + Math.random() * this.customHeight),
+      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
+    },{ 
+      "user": 'pqr', 
+      "text":"HELLOWORLD",
+      "created_at": "Mon May 13 2013", 
+      "url": 'http://www.twitter.com/',
+      "score":5,
+      "positive_count":"3",
+      "negative_count":"1",
+      "comparative":"1",
+      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
+      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
+      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
+    },{ 
+      "user": 'xyz', 
+      "text":"HELLOWORLD",
+      "created_at": "Thu Jun 06 2013", 
+      "url": 'http://www.twitter.com/',
+      "score":5,
+      "positive_count":"3",
+      "negative_count":"1",
+      "comparative":"1",
+      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
+      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
+      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
+    },{ 
+      "user": 'lmn', 
+      "text":"HELLOWORLD",
+      "created_at": "Thu May 09 2013", 
+      "url": 'http://www.twitter.com/',
+      "score":5,
+      "positive_count":"3",
+      "negative_count":"1",
+      "comparative":"1",
+      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
+      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
+      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
+    },{ 
+      "user": 'srt', 
+      "text":"HELLOWORLD",
+      "created_at": "Mon Jul 01 2013", 
+      "url": 'http://www.twitter.com/',
+      "score":5,
+      "positive_count":"3",
+      "negative_count":"1",
+      "comparative":"1",
+      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
+      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
+      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
+    }]
+
   this.data = this.JSONData.slice()
   this.format = d3.time.format("%a %b %d %Y")
   var that = this;
-  this.customHeight = window.innerHeight - 300;
-  this.customWidth = window.innerWidth - 300;  
-  this.amountFn = function(d) { return d.amount }
+
+  this.verticalPosFn = function(d) { return d.verticalPos }
   this.dateFn = function(d) { return that.format.parse(d.created_at) }
 
   this.x = d3.time.scale().range([10, this.customWidth]).domain(d3.extent(this.data, this.dateFn))
 
-  this.y = d3.scale.linear().range([this.customWidth, 10]).domain(d3.extent(this.data, this.amountFn))
+  this.y = d3.scale.linear().range([this.customWidth, 10]).domain(d3.extent(this.data, this.verticalPosFn))
   
   
-  this.svg = d3.select("#demo").append("svg:svg").attr("width", this.customWidth).attr("height", this.customHeight)
+  this.svg = d3.select("#demo").append("svg:svg").attr("width", this.customWidth).attr("height", this.customHeight);
+  $('#demo svg').attr("class", ' stream ')
 
   this.refreshGraph = function() {
     that.x.domain(d3.extent(that.data, that.dateFn))
-    that.y.domain(d3.extent(that.data, that.amountFn))
+    that.y.domain(d3.extent(that.data, that.verticalPosFn))
   
     this.circles = that.svg.selectAll("circle").data(that.data).enter()
-   .append("svg:circle")
-   .attr("r", 10)
-   .attr("cx", function(d) { return that.x(that.dateFn(d)) })
-   .attr("cy", function(d) { return that.y(that.amountFn(d)) })
-   .attr("style", "cursor: pointer;")
-   .on("click", function(d) {
-      d3.select("#demo-footer .value").text("Date: " + d.created_at + " amount: " + d.amount)
-   })
+     .append("svg:circle")
+     .attr("r", 10)
+     .attr("cx", function(d) { return d.horizontalPos })
+     .attr("cy", function(d) { return d.verticalPos })
+     .attr("style", "cursor: pointer;")
+     .attr('class', function(d) { return d.type })
+     .on("click", function(d) {
+        that.openOverlay('#overlay-inAbox');
+          
+        d3.select('#twitteruser').text('@'+d.user);
+        d3.select('#userprofileurl').text(d.user);
+        d3.select('#usertweet').text(d.text);
+        event.stopPropagation();
+      })
     
     this.circles.transition()
-     .attr("cx", function(d) { return that.x(that.dateFn(d)) })
-     .attr("cy", function(d) { return that.y(that.amountFn(d)) })
-  
-     this.circles.enter()
-      .append("svg:circle")
-      .attr("r", 10)
-      .attr("cx", function(d) { return that.x(that.dateFn(d)) })
-      .attr("cy", function(d) { return that.y(that.amountFn(d)) })
+     .attr("cx", function(d) { return d.horizontalPos })
+     .attr("cy", function(d) { return d.verticalPos })
+   
   }
 
-   this.svg.selectAll("circle")
+  this.svg.selectAll("circle")
    .data(this.JSONData, function(d) {
      return d.created_at
    });
-   
-/*  d3.selectAll(".add-data")
-   .on("click", function() {
-     var start = d3.min(data, dateFn)
-     var end = d3.max(data, dateFn)
-     var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
-     var date = new Date(time)
+  
+  that.refreshGraph();
+  
+  $(document).on('click',function(){
+    $('#demo-footer').hide();
+    $('#meta-stats').show();
+  });
 
-     obj = {
-       'id': Math.floor(Math.random() * 70),
-       'amount': Math.floor(1000 + Math.random() * 20001),
-       'created_at': date.toDateString()
-     }
-     data.push(obj)
-     refreshGraph()
-  })
-*/
-  setInterval(function(){
-      var start = d3.min(that.data, that.dateFn)
-      var end = d3.max(that.data, that.dateFn)
-      var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
-      var date = new Date(time)
-
-      obj = {
-        'id': Math.floor(Math.random() * 70),
-        'amount': Math.floor(1000 + Math.random() * 20001),
-        'created_at': date.toDateString()
-      }
-      that.data.push(obj)
-      that.refreshGraph()
-  },2000) 
-
-/*  setInterval(this.repaint,2000);
-  this.repaint = function(){
-      var start = d3.min(that.data, that.dateFn)
-      var end = d3.max(that.data, that.dateFn)
-      var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
-      var date = new Date(time)
-
-      obj = {
-        'id': Math.floor(Math.random() * 70),
-        'amount': Math.floor(1000 + Math.random() * 20001),
-        'created_at': date.toDateString()
-      }
-      that.data.push(obj)
-      that.refreshGraph()    
+  $('#overlay-shade, .overlay a').live('click', function(e) {
+    that.closeOverlay();
+    if ($(this).attr('href') == '#') e.preventDefault();
+  });
+  this.closeOverlay = function() {
+    $('.overlay').animate({
+        top : '-=300',
+        opacity : 0
+    }, 400, function() {
+        $('#overlay-shade').fadeOut(300);
+        $(this).css('display','none');
+    });
   }
-*/
 
-  that.refreshGraph()
+  this.openOverlay =function (olEl){
+        $oLay = $(olEl);
+        
+        if ($('#overlay-shade').length == 0)
+            $('body').prepend('<div id="overlay-shade"></div>');
+
+        $('#overlay-shade').fadeTo(300, 0.6, function() {
+            var props = {
+                oLayWidth       : $oLay.width(),
+                scrTop          : $(window).scrollTop(),
+                viewPortWidth   : $(window).width()
+            };
+
+            var leftPos = (props.viewPortWidth - props.oLayWidth) / 2;
+
+            $oLay
+                .css({
+                    display : 'block',
+                    opacity : 0,
+                    top : '-=300',
+                    left : leftPos+'px'
+                })
+                .animate({
+                    top : props.scrTop + 40,
+                    opacity : 1
+                }, 600);
+        });
+    }
+
+
 }
 
 $(function() {

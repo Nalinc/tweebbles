@@ -87,7 +87,7 @@ define(['vis','jqueryui'], function() {
 			}
 		});
 
-		app.controller('bubbleController', function($scope,$rootScope,$timeout,$location,$http){
+		app.controller('bubbleController', function($scope,$rootScope,$timeout,$interval,$location,$http){
 			if(!$rootScope.testphrase)
 				$location.path('/');
 			else{
@@ -116,26 +116,18 @@ define(['vis','jqueryui'], function() {
 					return location.search = encodeURIComponent(key);
 				});
 				d3.select("#book-title").html(text.name);
-
-				
-				var obj = [
-							{
-								"name":"holmes",
-								"word":"holmes",
-								"count":4
-							},{
-								"name":"little",
-								"word":"little",
-								"count":3
-							},{
-								"name":"time",
-								"word":"time",
-								"count":2
-							},{
-								"name":"door",
-								"word":"door",
-								"count":1
-							}];
+		
+/*	            var obj={
+	                'user':data.user,
+	                'text':data.text,
+	                'created_at':data['created_at'],
+	                'url':'http://www.twitter.com/'+data.user['screen_name']+'/status/'+data['id_str'],
+	                'score':result.score,
+	                'positive_count':result.positive.length,
+	                'negative_count':result.negative.length,
+	                'comparative':result.comparative,
+	                'type':(parseInt(result.score)>0)?'positive':(((parseInt(result.score)<0)?'negative':'neutral'))
+	            }*/
 
 				$timeout(function(){
 					console.log('now')
@@ -145,21 +137,30 @@ define(['vis','jqueryui'], function() {
 						display($rootScope.bubbleData)
 					}
 					if($rootScope.search.option=='sentiment'){
-						var o = new bubbleStream();
-/*						setInterval(function(){
-						  var start = d3.min(o.data, o.dateFn)
-						  var end = d3.max(o.data, o.dateFn)
-						  var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
-						  var date = new Date(time)
-
-						  obj = {
-						    'id': Math.floor(Math.random() * 70),
-						    'amount': Math.floor(1000 + Math.random() * 20001),
-						    'created_at': date.toDateString()
-						  }
-						  o.data.push(obj)
-						  o.refreshGraph()
-						},2000)*/
+						var obj = new bubbleStream();
+						$interval(function(){
+							var start = d3.min(obj.data, obj.dateFn)
+							var end = d3.max(obj.data, obj.dateFn)
+							var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
+							var date = new Date(time)
+	    					var sentiment_type = Math.floor(Math.random() * 3) 	
+							objData = {
+								'user': Math.floor(Math.random() * 70),
+								'text':'Lorem ipsum dolor sit amet',
+							    'created_at': date.toDateString(),
+							    'url':'http://www.twitter.com/',
+							    'score':'7',
+								'positive_count':'3',
+								'negative_count':'1',
+								'comparative':'1',
+								'horizontalPos': Math.floor(10 + Math.random() * obj.customWidth),
+								'verticalPos': Math.floor(10 + Math.random() * obj.customHeight),
+								'type': (sentiment_type>1)? 'positive':((sentiment_type<1)?'negative':'neutral')
+							}
+							console.log(objData.type)
+							obj.data.push(objData)
+							obj.refreshGraph()
+						},1000) 
 					}
 				})
 			}
