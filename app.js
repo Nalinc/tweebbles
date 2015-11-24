@@ -1,8 +1,13 @@
 var express = require('express')
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 var Twit = require('twit');
 var config = require('./config');
+var sentiment = require('sentiment');
 
+// make Stream globally visible so we can clean up better
+var stream;
 
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/src/'));
@@ -69,38 +74,83 @@ app.get('/timeline/:user', function(req, res) {
     });
     return newArray;
   }
-  /**
-   * requests the oEmbed html
-   */
-  function getOEmbed (tweet) {
 
-    // oEmbed request params
-    var params = {
-      "id": tweet.id_str,
-      "maxwidth": MAX_WIDTH,
-      "hide_thread": true,
-      "omit_script": true
-    };
-
-    // request data 
-    twitter.get(OEMBED_URL, params, function (err, data, resp) {
-      tweet.oEmbed = data;
-      oEmbedTweets.push(tweet);
-
-      // do we have oEmbed HTML for all Tweets?
-      if (oEmbedTweets.length == tweets.length) {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(oEmbedTweets);
-      }
-    });
-  }
 });
 
-/*app.get('',function(){
-
+app.get('/sentiment/:phrase',function(req,res){
+  res.send({phrase:req.query.phrase})
 })
-*/
 
-app.listen(app.get('port'), function() {
+var tweetCount = 0;
+var tweetTotalSentiment = 0;
+var monitoringPhrase;
+
+io.on('connection',function(client){
+
+    function resetMonitoring() {
+        if(stream)
+            stream.stop();
+        monitoringPhrase = "";
+    }
+
+    function beginMonitoring(monitoringPhrase) {
+      stream = twitter.stream('statuses/filter', { track: monitoringPhrase })
+
+      stream.on('tweet', function (tweet) {
+        if(tweet.lang == 'en'){
+            sentiment(tweet.text, function (err, result) {
+                tweetCount++;
+                tweetTotalSentiment += result.score;
+                var obj={
+                    'user':tweet.user,
+                    'text':tweet.text,
+                    'created_at':tweet['created_at'],
+                    'url':'http://www.twitter.com/'+tweet.user['screen_name']+'/status/'+tweet['id_str'],
+                    'score':result.score,
+                    'positive_count':result.positive.length,
+                    'negative_count':result.negative.length,
+                    'comparative':result.comparative,
+                    'type':(parseInt(result.score)>0)?'positive':(((parseInt(result.score)<0)?'negative':'neutral'))
+                }
+                client.emit('feedsupdate',obj)                                
+            });          
+        }
+      });
+      stream.on('error', function (error, code) {
+          console.error("Error received from tweet stream: " + code);
+          if(code === 420)
+            console.error("API limit hit, are you using your own keys?");
+          resetMonitoring();
+      });
+      stream.on('disconnect', function (response) {
+          if (stream) { // if we're not in the middle of a reset already
+            // Handle a disconnection
+            console.error("Stream ended unexpectedly, resetting monitoring.");
+            resetMonitoring();
+          }
+      });
+    }
+
+    client.on('monitor',function(phrase){
+        console.log('analyzing phrase: ' +phrase);
+        resetMonitoring();
+        beginMonitoring(phrase);
+    });
+
+    client.on('pauseStreaming',function(data){
+        resetMonitoring();
+    });
+
+    client.on("disconnect",function(){
+        console.log("user "+client.name+" left..");
+        resetMonitoring();
+        client.broadcast.emit("removeUser",client.name);
+    });
+});
+
+
+
+
+server.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))
 })

@@ -2,26 +2,30 @@
     <header>
     <div style='text-align:center' id='meta-stats'>
 	    <h1>twitter bubble cloud</h1>
-	    <h4>Most frequently used phrases by: <b>@{{testphrase}}</b></h4>    	
+	    <h4 ng-if='search.option=="user"'>Most frequently used phrases by: <b>@{{testphrase}}</b></h4>
+	    <h4 ng-if='search.option=="sentiment"'>
+			Analyzed <span id='numberOfTweets' style='font-weight:bold'>0</span> tweets 
+		    for the phrase: <b>@{{testphrase}}</b>
+		</h4>    	
     </div>
 	<div id="overlay-inAbox" class="overlay">
-	    <div class="toolbar">
-	        <a class="close" href="#"><span>x</span></a>
-	    </div>
 	    <div class="wrapper">
 			<ul class="timeline">
+				<li style='padding:7px 0'><b id='twitteruser'></b></li>
 				<li>
 				    <div class="avatar">
-						<img id='userprofileurl' src="http://www.croop.cl/UI/twitter/images/doug.jpg">
-						<span id='twitteruser'></span>
+						<img id='userprofileurl' src="#">
+						<span id='twitterusername'></span>
 				    </div>
 				    <div class="bubble-container">
-					    <div class="bubble">
-					 	    <div class="retweet">
-						        <div class="icon-retweet"></div>
-					        </div>
-					        <span id='usertweet'></span>
-						</div>
+				    	<a href="#" target='_blank' id='tweeturl'>
+						    <div class="bubble">
+						 	    <div class="retweet">
+							        <div class="icon-retweet"></div>
+						        </div>
+						        <span id='usertweet' style='text-align:justify;color:#000'></span>
+							</div>
+						</a>
 				    </div>
 				</li>
 			</ul>

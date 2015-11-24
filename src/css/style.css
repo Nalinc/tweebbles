@@ -325,23 +325,17 @@ input[type=radio]:not(old):checked +  label > span > span{
 .timeline {
   width: 560px;
   display: block;
-  margin: auto;
-  background-color: #dde1e2;
+  margin-bottom: 0px;
+  background-color: #fff;
   padding-left:0;
-  -webkit-box-shadow: #bdc3c7 0 5px 5px;
-  -moz-box-shadow: #bdc3c7 0 5px 5px;
-  box-shadow: #bdc3c7 0 5px 5px;
-  -moz-border-radius-bottomleft: 8px;
-  -webkit-border-bottom-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  -moz-border-radius-bottomright: 8px;
-  -webkit-border-bottom-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  margin-bottom: 2em; }
+  border-radius:5px;
+  color:#000;
+  text-align: center;
+ }
   .timeline li {
     list-style-type: none;
     padding: 1em 0; }
-  .timeline li:nth-child(even) {
+  .timeline li {
     background-color: #d3d7d8; }
 
 .avatar {
@@ -349,7 +343,7 @@ input[type=radio]:not(old):checked +  label > span > span{
   display: inline-block;
   vertical-align: top;
   position: relative;
-  overflow: hidden;
+  overflow: inherit;
   margin-left: 2%; }
   .avatar img {
     width: 100%;
@@ -405,14 +399,13 @@ input[type=radio]:not(old):checked +  label > span > span{
     top: -300px;
     left: 0;
     width: inherit;
-    min-height: 200px;
     z-index: 10000;
     background-color: #fff;
     color: #fff;
 } .ie7 .overlay {
     height: 200px;
 } .overlay .wrapper {
-    padding: 15px 30px 30px;
+    padding: 0;
 }
 
 .overlay .toolbar {
@@ -422,8 +415,8 @@ input[type=radio]:not(old):checked +  label > span > span{
     overflow: hidden;
 } .overlay .toolbar a.close {
     display: inline-block;
-        *display: inline;
-         zoom: 1;
+    *display: inline;
+     zoom: 1;
     padding: 0 8px;
     font-size: 12px;
     text-decoration: none;
@@ -451,6 +444,11 @@ svg.stream{
 svg.stream circle {
     stroke-width: 1px;
     stroke: #000;
+    fill: transparent;
+    cursor: pointer;
+}
+svg.stream circle:hover {
+    stroke-width: 2px;
     fill: transparent;
     cursor: pointer;
 }

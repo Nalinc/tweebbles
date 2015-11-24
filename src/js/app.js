@@ -1,7 +1,7 @@
 define(['vis','jqueryui'], function() {
 
 		var app = angular.module('app', ['ngRoute']);
-
+		var socket;	
 		app.config(function($routeProvider){
 
 			$routeProvider
@@ -29,6 +29,9 @@ define(['vis','jqueryui'], function() {
 		 		};
 		 	});
 		app.controller('homeController', function($scope,$rootScope,$location,$http){
+			if(socket){
+				socket.emit('disconnect',$rootScope.testphrase);
+			}
 			$scope.appname = '< Tweebbles >';
 			$rootScope.search = {
 				'option': 'user'
@@ -70,16 +73,21 @@ define(['vis','jqueryui'], function() {
 				}
 			};
 			function init(){
-				var display, key, plot, text;
+				var display, key, plot, text, url_base;
+				if($rootScope.search.option=='user')
+					url_base = 'timeline/'
+				else if($rootScope.search.option=='sentiment')
+					url_base = 'sentiment/'
 
-				$http.get('timeline/'+$rootScope.testphrase).
+				$http.get(url_base+$rootScope.testphrase).
 				then(function(res){
+					if(res.data.constructor == Array){
+						res.data.sort(function(a, b) {
+						    return parseFloat(b.count) - parseFloat(a.count);
+						});
+						$rootScope.bubbleData = res.data.slice(0,50);						
+					}
 
-					res.data.sort(function(a, b) {
-					    return parseFloat(b.count) - parseFloat(a.count);
-					});
-
-					$rootScope.bubbleData = res.data.slice(0,50);
 					$location.path("/monitor");						
 				},function(err){
 					console.log(err);
@@ -93,8 +101,7 @@ define(['vis','jqueryui'], function() {
 			else{
 				$rootScope.showLoader= false;
 				$scope.feeds=[];
-				console.log($rootScope.bubbleData)
-				window.plot = Bubbles();
+		
 				display = function(data) {
 					return plotData("#vis", data, plot);
 				};
@@ -116,51 +123,46 @@ define(['vis','jqueryui'], function() {
 					return location.search = encodeURIComponent(key);
 				});
 				d3.select("#book-title").html(text.name);
-		
-/*	            var obj={
-	                'user':data.user,
-	                'text':data.text,
-	                'created_at':data['created_at'],
-	                'url':'http://www.twitter.com/'+data.user['screen_name']+'/status/'+data['id_str'],
-	                'score':result.score,
-	                'positive_count':result.positive.length,
-	                'negative_count':result.negative.length,
-	                'comparative':result.comparative,
-	                'type':(parseInt(result.score)>0)?'positive':(((parseInt(result.score)<0)?'negative':'neutral'))
-	            }*/
 
 				$timeout(function(){
-					console.log('now')
-					//display(obj)
-
 					if($rootScope.search.option=='user'){
+						window.plot = Bubbles();
 						display($rootScope.bubbleData)
 					}
 					if($rootScope.search.option=='sentiment'){
 						var obj = new bubbleStream();
-						$interval(function(){
-							var start = d3.min(obj.data, obj.dateFn)
-							var end = d3.max(obj.data, obj.dateFn)
-							var time = start.getTime() + Math.random() * (end.getTime() - start.getTime())
-							var date = new Date(time)
-	    					var sentiment_type = Math.floor(Math.random() * 3) 	
-							objData = {
-								'user': Math.floor(Math.random() * 70),
-								'text':'Lorem ipsum dolor sit amet',
-							    'created_at': date.toDateString(),
-							    'url':'http://www.twitter.com/',
-							    'score':'7',
-								'positive_count':'3',
-								'negative_count':'1',
-								'comparative':'1',
-								'horizontalPos': Math.floor(10 + Math.random() * obj.customWidth),
-								'verticalPos': Math.floor(10 + Math.random() * obj.customHeight),
-								'type': (sentiment_type>1)? 'positive':((sentiment_type<1)?'negative':'neutral')
-							}
-							console.log(objData.type)
-							obj.data.push(objData)
+						socket = io.connect('http://localhost:5000');
+						socket.emit('monitor',$rootScope.testphrase);
+						var counter = 0
+						socket.on('feedsupdate',function(res){
+							$('#numberOfTweets').text(counter++);
+							res.verticalPos = Math.floor(10 + Math.random() * obj.customHeight);
+							res.horizontalPos = Math.floor(10 + Math.random() * obj.customWidth);
+							obj.data.push(res)
 							obj.refreshGraph()
-						},1000) 
+						})
+
+						$scope.pauseMonitoring = function(){
+							socket.emit('pauseStreaming',$rootScope.testphrase);
+						}
+
+						$scope.resumeMonitoring = function(){
+							socket.emit('monitor',$rootScope.testphrase);
+						}
+						$scope.reset = function(){
+							socket.emit('pauseStreaming',$rootScope.testphrase);
+							$location.path('/');
+						}				
+						$scope.changeState = function(){
+							if($scope.monitoringPhase=='pause'){
+								$scope.monitoringPhase='resume'
+								$scope.pauseMonitoring();
+							}
+							else{
+								$scope.monitoringPhase='pause'
+								$scope.resumeMonitoring();
+							}
+						}
 					}
 				})
 			}

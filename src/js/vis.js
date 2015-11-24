@@ -242,67 +242,7 @@ function bubbleStream(){
   this.customHeight = window.innerHeight - 300;
   this.customWidth = window.innerWidth - 300;  
 
-  this.JSONData = [
-    { "user": 'abc', 
-      "text":"HELLOWORLD",
-      "created_at": "Sun May 05 2013", 
-      "url": 'http://www.twitter.com/',
-      "score":5,
-      "positive_count":"3",
-      "negative_count":"1",
-      "comparative":"1",
-      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
-      "verticalPos": Math.floor(10 + Math.random() * this.customHeight),
-      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
-    },{ 
-      "user": 'pqr', 
-      "text":"HELLOWORLD",
-      "created_at": "Mon May 13 2013", 
-      "url": 'http://www.twitter.com/',
-      "score":5,
-      "positive_count":"3",
-      "negative_count":"1",
-      "comparative":"1",
-      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
-      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
-      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
-    },{ 
-      "user": 'xyz', 
-      "text":"HELLOWORLD",
-      "created_at": "Thu Jun 06 2013", 
-      "url": 'http://www.twitter.com/',
-      "score":5,
-      "positive_count":"3",
-      "negative_count":"1",
-      "comparative":"1",
-      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
-      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
-      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
-    },{ 
-      "user": 'lmn', 
-      "text":"HELLOWORLD",
-      "created_at": "Thu May 09 2013", 
-      "url": 'http://www.twitter.com/',
-      "score":5,
-      "positive_count":"3",
-      "negative_count":"1",
-      "comparative":"1",
-      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
-      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
-      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
-    },{ 
-      "user": 'srt', 
-      "text":"HELLOWORLD",
-      "created_at": "Mon Jul 01 2013", 
-      "url": 'http://www.twitter.com/',
-      "score":5,
-      "positive_count":"3",
-      "negative_count":"1",
-      "comparative":"1",
-      'horizontalPos': Math.floor(10 + Math.random() * this.customWidth),
-      "verticalPos":Math.floor(10 + Math.random() * this.customHeight),
-      "type":(Math.floor(Math.random() * 3) >1)? 'positive':((Math.floor(Math.random() * 3) <1)?'negative':'neutral')
-    }]
+  this.JSONData = []
 
   this.data = this.JSONData.slice()
   this.format = d3.time.format("%a %b %d %Y")
@@ -325,17 +265,29 @@ function bubbleStream(){
   
     this.circles = that.svg.selectAll("circle").data(that.data).enter()
      .append("svg:circle")
-     .attr("r", 10)
+     .attr("r", function(d){ return 10+2*Math.abs(d.score) })
      .attr("cx", function(d) { return d.horizontalPos })
      .attr("cy", function(d) { return d.verticalPos })
      .attr("style", "cursor: pointer;")
      .attr('class', function(d) { return d.type })
      .on("click", function(d) {
+
+        $('#userprofileurl').attr('src',d.user['profile_image_url']);
+        console.log(d)
         that.openOverlay('#overlay-inAbox');
+
+        if(d.type=='positive')
+          $('#overlay-shade').css({'background-color':'darkseagreen'})
+        else if(d.type=='negative')
+          $('#overlay-shade').css({'background-color':'lightcoral'})
+        else
+          $('#overlay-shade').css({'background-color':'lightblue'})
           
-        d3.select('#twitteruser').text('@'+d.user);
-        d3.select('#userprofileurl').text(d.user);
+        d3.select('#twitteruser').text(d.user['name']);
+        d3.select('#twitterusername').text('@'+d.user['screen_name']);
         d3.select('#usertweet').text(d.text);
+        d3.select('#tweeturl').attr('href',d.url);
+
         event.stopPropagation();
       })
     
@@ -389,14 +341,15 @@ function bubbleStream(){
             $oLay
                 .css({
                     display : 'block',
+                    'border-radius': '10px',
                     opacity : 0,
                     top : '-=300',
                     left : leftPos+'px'
                 })
                 .animate({
-                    top : props.scrTop + 40,
+                    top : props.scrTop + 60,
                     opacity : 1
-                }, 600);
+                }, 300);
         });
     }
 
