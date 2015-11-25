@@ -131,7 +131,7 @@ define(['vis','jqueryui'], function() {
 					}
 					if($rootScope.search.option=='sentiment'){
 						var obj = new bubbleStream();
-						socket = io.connect('http://localhost:5000');
+						socket = io.connect(window.location.hostname);
 						socket.emit('monitor',$rootScope.testphrase);
 						var counter = 0
 						socket.on('feedsupdate',function(res){
