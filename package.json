@@ -1,0 +1,33 @@
+{
+  "name": "tweebbles",
+  "version": "1.0.0",
+  "description": "a data-centric view of user tweets ",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "socket.io": "^1.3.7",
+    "sentiment": "^1.0.2",
+    "twit": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nalinc/tweebbles.git"
+  },
+  "keywords": [
+    "twitter",
+    "information-retreival",
+    "data-visualization",
+    "design",
+    "interface"
+  ],
+  "author": "Nalin_C",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nalinc/tweebbles/issues"
+  },
+  "homepage": "https://github.com/Nalinc/tweebbles"
+}
